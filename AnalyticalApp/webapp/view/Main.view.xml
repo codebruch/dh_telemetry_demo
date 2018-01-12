@@ -1,0 +1,102 @@
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core"
+	xmlns:vtypes="sap.viz.ui5.types" xmlns:vdata="sap.viz.ui5.data" xmlns:vizc="sap.viz.ui5.controls"  xmlns:l="sap.ui.layout"
+	controllerName="BitcoinOrderbook.controller.Main" displayBlock="true">
+	<App>
+		<pages>
+			<Page id="page" title="Bitcoin Orderbook">
+				<Column xmlns="sap.viz.ui5" id="sell_bar" width="100%" height="400px">
+					<title>
+						<vtypes:Title text="Sell - Orders" visible="true"/>
+					</title>
+					<dataset>
+						<FlattenedDataset xmlns="sap.viz.ui5.data" data="{/bids}">
+							<dimensions>
+								<DimensionDefinition axis="1" name="price" value="{price}"/>
+							</dimensions>
+							<measures>
+								<MeasureDefinition name="Amount" value="{amount}"/>
+							</measures>
+						</FlattenedDataset>
+					</dataset>
+				</Column>
+				<Table noDataText="Bids" growing="true" items="{/bids}">
+					<items>
+						<ColumnListItem id="bItem0">
+							<cells>
+								<Text text="" id="bText0"/>
+								<Text text="{amount}" id="bText1"/>
+								<Text text="{price}" id="bText2"/>
+							</cells>
+						</ColumnListItem>
+					</items>
+					<columns>
+						<Column id="bColumn0">
+							<header>
+								<Label text="" id="bLabel0"/>
+							</header>
+						</Column>
+						<Column id="bColumn1">
+							<header>
+								<Label text="Amount" id="bLabel1"/>
+							</header>
+						</Column>
+						<Column id="bColumn2">
+							<header>
+								<Label text=" Price " id="bLabel2"/>
+							</header>
+						</Column>
+					</columns>
+				</Table>
+				<Column xmlns="sap.viz.ui5" id="buy_bar" width="100%" height="400px">
+					<title>
+						<vtypes:Title text="Buy" visible="true"/>
+					</title>
+					<dataset>
+						<FlattenedDataset xmlns="sap.viz.ui5.data" data="{/asks}">
+							<dimensions>
+								<DimensionDefinition axis="1" name="price" value="{price}"/>
+							</dimensions>
+							<measures>
+								<MeasureDefinition name="amount" value="{amount}"/>
+							</measures>
+						</FlattenedDataset>
+					</dataset>
+				</Column>
+				<Table noDataText="Asks" growing="true" items="{/asks}">
+					<items>
+						<ColumnListItem id="aItem0">
+							<cells>
+								<Text text="" id="aText0"/>
+								<Text text="{amount}" id="aText1"/>
+								<Text text="{price}" id="aText2"/>
+							</cells>
+						</ColumnListItem>
+					</items>
+					<columns>
+						<Column id="aColumn0">
+							<header>
+								<Label text="" id="aLabel0"/>
+							</header>
+						</Column>
+						<Column id="aColumn1">
+							<header>
+								<Label text="Amount" id="aLabel1"/>
+							</header>
+						</Column>
+						<Column id="aColumn2">
+							<header>
+								<Label text=" Price " id="aLabel2"/>
+							</header>
+						</Column>
+					</columns>
+				</Table>
+				<!--- List items können direkt die Werte aus der API annehmen. Man kann jedes einzeln ansprechen anderst als bei der table wo nur der ganze Block ansprechbar ist
+			    <List noDataText="Bids" growing="true" items="{/bids}">
+					<items>
+						<StandardListItem title="{amount}"/>
+					</items>
+				</List>-->
+			</Page>
+		</pages>
+	</App>
+</mvc:View>
