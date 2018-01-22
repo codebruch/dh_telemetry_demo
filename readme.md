@@ -14,6 +14,8 @@ Doing:
 - Vora Tools: DEMO_MAT_ENR (roh) manuell anlegen (check structure) / SQL Editor 
 - Modeler:    Run DH_Demo_prep --> DEMO_MAT_VORA
 - Modeler:    Run DH_Demo_prep --> TelemetryDistinctMac
+
 Next Steps: 
-- Somewhere:  Enrich TelemetryDistinctMac with Outliner Materials
-- Modeler:    Join Vora DEMO_MAT_ENR and TelemetryDistinctMac ....
+
+- Somewhere:  Enrich TelemetryDistinctMac with Nice Materials
+- ?? View / Join / ?:    Join DEMO_MAT_ENR and TelemetryDistinctMac ....
