@@ -5,7 +5,9 @@ Prep:
 Doing:
 - Vora Tools: CAR_TELEMETRY_COLLECTION creation in Vora mit carTelemetrydata json source
   Pipeline Modeler: Start TelemetryDataRefinery --> created CSV auf HDFS
+  
 	oder: 
+	
   Modeler:    Run task DH_Demo_Prep --> TelemetryJSON2CSV
 - Modeler:    Run Task DH_Demo_Prep --> EnrichedMaterials
   Modeler:    Check DH_Demo_prep DataSet MATERIALS_ENRICHED Data preview
