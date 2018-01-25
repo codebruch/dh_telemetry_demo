@@ -4,6 +4,7 @@ Prep:
 	cartelemetrydata bash in Zeppelin demo_setup 
 	(s4materials bash in Zeppelin demo_setup) 
 	macmat bash in Zeppelin (aus CSV TODO) 
+	
 Doing:
 - Modeler: 
 	Create / Execute Task A_ConvertTelemetryData CSV with Pipeline Flowgraph 
