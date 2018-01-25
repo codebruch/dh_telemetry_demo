@@ -1,1 +1,207 @@
-{"properties":{},"description":"","processes":{"sapvoraclient1":{"component":"com.sap.vora.client","metadata":{"label":"SAP Vora Client","x":184,"y":72,"height":80,"width":120,"config":{"dsn":"v2://dqp:50000/?binary=true"}}},"constantgenerator1":{"component":"com.sap.util.constantGenerator","metadata":{"label":"Constant Generator","x":16,"y":72,"height":80,"width":120,"extensible":true,"config":{"mode":"once","duration":"2s","counter":0,"content":"select  distinct(\"value\".\"id\")  from \"VORA\".\"CAR_TELEMETRY_COLLECTION\" where \"deviceType\"='AnkiCar'  and \"param\"='status' and \"_MessageGateway_TimeISO8601\" IS NOT MISSING "}}},"javascriptoperator2":{"component":"com.sap.system.jsengine","metadata":{"label":"JavaScript Operator","x":352,"y":72,"height":80,"width":120,"extensible":true,"config":{"script":"$.setPortCallback(\"input\",onInput);\n\nfunction onInput(ctx,s) {\n    //$.output(s);\n\n    try {\n        var r = JSON.parse(s);\n    } catch(e) {\n        // fail silently on invalid JSON string\n        return;\n    }\n    if(!r.Success)\n        return;\n    if(r.Data === null)\n        return;\n    \n    var out = \"\";\n    for(var i = 0; i < r.Data.length; ++i) {\n        \n        if(i === 0)\n            out += \"material_id , id\\n\" ;\n            \n        var row = r.Data[i];\n        for(var col in row){\n         if(row[col] === 'null')\n           row[col] = 0\n            \n        }    \n            out +=\"0, \"+row['value.id'] ;\n        out += \"\\n\";\n    }\n    $.output(out);\n    \n}"}}},"hdfsproducer1":{"component":"com.sap.storage.hdfs.producer","metadata":{"label":"HDFS Producer","x":887.9999980926514,"y":72,"height":80,"width":120,"config":{"path":"/car_telemetrydata/CarTelemetryExtractedMacadress.csv","hadoopNamenode":"spark-hdfs-adapter:8020","append":false}}},"tomessageconverter1":{"component":"com.sap.util.toMessageConverter","metadata":{"label":"ToMessage Converter","x":703.9999990463257,"y":12,"height":80,"width":120,"config":{}}},"graphterminator1":{"component":"com.sap.util.graphTerminator","metadata":{"label":"Graph Terminator","x":1055.9999980926514,"y":72,"height":80,"width":120,"config":{}}},"12multiplexer1":{"component":"com.sap.system.multiplexer.1-2","metadata":{"label":"1:2 Multiplexer","x":520,"y":72,"height":80,"width":120,"extensible":true,"config":{}}},"terminal1":{"component":"com.sap.util.terminal","metadata":{"label":"Terminal","x":703.9999990463257,"y":132,"height":80,"width":120,"ui":"dynpath","config":{}}}},"groups":[],"connections":[{"metadata":{"points":"827.9999990463257,52 855.9999985694885,52 855.9999985694885,112 883.9999980926514,112"},"src":{"port":"out","process":"tomessageconverter1"},"tgt":{"port":"inFile","process":"hdfsproducer1"}},{"metadata":{"points":"1011.9999980926514,112 1051.9999980926514,112"},"src":{"port":"outFilename","process":"hdfsproducer1"},"tgt":{"port":"stop","process":"graphterminator1"}},{"metadata":{"points":"140,112 180,112"},"src":{"port":"out","process":"constantgenerator1"},"tgt":{"port":"insql","process":"sapvoraclient1"}},{"metadata":{"points":"308,112 348,112"},"src":{"port":"outresult","process":"sapvoraclient1"},"tgt":{"port":"input","process":"javascriptoperator2"}},{"metadata":{"points":"476,112 516,112"},"src":{"port":"output","process":"javascriptoperator2"},"tgt":{"port":"in1","process":"12multiplexer1"}},{"metadata":{"points":"644,103 671.9999995231628,103 671.9999995231628,43 699.9999990463257,43"},"src":{"port":"out1","process":"12multiplexer1"},"tgt":{"port":"inbody","process":"tomessageconverter1"}},{"metadata":{"points":"644,121 671.9999995231628,121 671.9999995231628,172 699.9999990463257,172"},"src":{"port":"out2","process":"12multiplexer1"},"tgt":{"port":"in1","process":"terminal1"}}],"inports":{},"outports":{}}
+{
+	"properties": {},
+	"description": "",
+	"processes": {
+		"sapvoraclient1": {
+			"component": "com.sap.vora.client",
+			"metadata": {
+				"label": "SAP Vora Client",
+				"x": 184,
+				"y": 72,
+				"height": 80,
+				"width": 120,
+				"config": {
+					"dsn": "v2://dqp:50000/?binary=true"
+				}
+			}
+		},
+		"constantgenerator1": {
+			"component": "com.sap.util.constantGenerator",
+			"metadata": {
+				"label": "Constant Generator",
+				"x": 16,
+				"y": 72,
+				"height": 80,
+				"width": 120,
+				"extensible": true,
+				"config": {
+					"mode": "once",
+					"duration": "2s",
+					"counter": 0,
+					"content": "select  distinct(\"value\".\"id\")  from \"VORA\".\"CAR_TELEMETRY_COLLECTION\" where \"deviceType\"='AnkiCar'  and \"param\"='status' and \"_MessageGateway_TimeISO8601\" IS NOT MISSING "
+				}
+			}
+		},
+		"javascriptoperator2": {
+			"component": "com.sap.system.jsengine",
+			"metadata": {
+				"label": "JavaScript Operator",
+				"x": 352,
+				"y": 72,
+				"height": 80,
+				"width": 120,
+				"extensible": true,
+				"config": {
+					"script": "$.setPortCallback(\"input\",onInput);\n\nfunction onInput(ctx,s) {\n    //$.output(s);\n\n    try {\n        var r = JSON.parse(s);\n    } catch(e) {\n        // fail silently on invalid JSON string\n        return;\n    }\n    if(!r.Success)\n        return;\n    if(r.Data === null)\n        return;\n    \n    var out = \"\";\n    for(var i = 0; i < r.Data.length; ++i) {\n        \n        if(i === 0)\n            out += \"material_id , id\\n\" ;\n            \n        var row = r.Data[i];\n        for(var col in row){\n         if(row[col] === 'null')\n           row[col] = 0\n            \n        }    \n            out +=\"0, \"+row['value.id'] ;\n        out += \"\\n\";\n    }\n    $.output(out);\n    \n}"
+				}
+			}
+		},
+		"hdfsproducer1": {
+			"component": "com.sap.storage.hdfs.producer",
+			"metadata": {
+				"label": "HDFS Producer",
+				"x": 887.9999980926514,
+				"y": 72,
+				"height": 80,
+				"width": 120,
+				"config": {
+					"path": "/car_telemetry_solution/CarTelemetryExtractedMacadress.csv",
+					"hadoopNamenode": "spark-hdfs-adapter:8020",
+					"append": false
+				}
+			}
+		},
+		"tomessageconverter1": {
+			"component": "com.sap.util.toMessageConverter",
+			"metadata": {
+				"label": "ToMessage Converter",
+				"x": 703.9999990463257,
+				"y": 12,
+				"height": 80,
+				"width": 120,
+				"config": {}
+			}
+		},
+		"graphterminator1": {
+			"component": "com.sap.util.graphTerminator",
+			"metadata": {
+				"label": "Graph Terminator",
+				"x": 1055.9999980926514,
+				"y": 72,
+				"height": 80,
+				"width": 120,
+				"config": {}
+			}
+		},
+		"12multiplexer1": {
+			"component": "com.sap.system.multiplexer.1-2",
+			"metadata": {
+				"label": "1:2 Multiplexer",
+				"x": 520,
+				"y": 72,
+				"height": 80,
+				"width": 120,
+				"extensible": true,
+				"config": {}
+			}
+		},
+		"terminal1": {
+			"component": "com.sap.util.terminal",
+			"metadata": {
+				"label": "Terminal",
+				"x": 703.9999990463257,
+				"y": 132,
+				"height": 80,
+				"width": 120,
+				"ui": "dynpath",
+				"config": {}
+			}
+		}
+	},
+	"groups": [],
+	"connections": [
+		{
+			"metadata": {
+				"points": "827.9999990463257,52 855.9999985694885,52 855.9999985694885,112 883.9999980926514,112"
+			},
+			"src": {
+				"port": "out",
+				"process": "tomessageconverter1"
+			},
+			"tgt": {
+				"port": "inFile",
+				"process": "hdfsproducer1"
+			}
+		},
+		{
+			"metadata": {
+				"points": "1011.9999980926514,112 1051.9999980926514,112"
+			},
+			"src": {
+				"port": "outFilename",
+				"process": "hdfsproducer1"
+			},
+			"tgt": {
+				"port": "stop",
+				"process": "graphterminator1"
+			}
+		},
+		{
+			"metadata": {
+				"points": "140,112 180,112"
+			},
+			"src": {
+				"port": "out",
+				"process": "constantgenerator1"
+			},
+			"tgt": {
+				"port": "insql",
+				"process": "sapvoraclient1"
+			}
+		},
+		{
+			"metadata": {
+				"points": "308,112 348,112"
+			},
+			"src": {
+				"port": "outresult",
+				"process": "sapvoraclient1"
+			},
+			"tgt": {
+				"port": "input",
+				"process": "javascriptoperator2"
+			}
+		},
+		{
+			"metadata": {
+				"points": "476,112 516,112"
+			},
+			"src": {
+				"port": "output",
+				"process": "javascriptoperator2"
+			},
+			"tgt": {
+				"port": "in1",
+				"process": "12multiplexer1"
+			}
+		},
+		{
+			"metadata": {
+				"points": "644,103 671.9999995231628,103 671.9999995231628,43 699.9999990463257,43"
+			},
+			"src": {
+				"port": "out1",
+				"process": "12multiplexer1"
+			},
+			"tgt": {
+				"port": "inbody",
+				"process": "tomessageconverter1"
+			}
+		},
+		{
+			"metadata": {
+				"points": "644,121 671.9999995231628,121 671.9999995231628,172 699.9999990463257,172"
+			},
+			"src": {
+				"port": "out2",
+				"process": "12multiplexer1"
+			},
+			"tgt": {
+				"port": "in1",
+				"process": "terminal1"
+			}
+		}
+	],
+	"inports": {},
+	"outports": {}
+}
