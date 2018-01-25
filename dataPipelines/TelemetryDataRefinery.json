@@ -28,7 +28,7 @@
 					"mode": "once",
 					"duration": "2s",
 					"counter": 0,
-					"content": "select \"_MessageGateway_TimeISO8601\" ,\"value\".\"speed\",  \"value\".\"battery\", \"value\".\"rank\", \"value\".\"user\", \"value\".\"id\"  from \"VORA\".\"CAR_TELEMETRY_COLLECTION\" where \"deviceType\"='AnkiCar'and \"param\"='status' and \"_MessageGateway_TimeISO8601\" IS NOT MISSING limit 100"
+					"content": "select \"_MessageGateway_TimeISO8601\" ,\"value\".\"speed\",  \"value\".\"battery\", \"value\".\"rank\", \"value\".\"user\", \"value\".\"id\"  from \"VORA\".\"CAR_TELEMETRY_COLLECTION\" where \"deviceType\"='AnkiCar'and \"param\"='status' and \"_MessageGateway_TimeISO8601\" IS NOT MISSING limit 3000"
 				}
 			}
 		},
@@ -36,8 +36,8 @@
 			"component": "com.sap.system.jsengine",
 			"metadata": {
 				"label": "JavaScript Operator",
-				"x": 352,
-				"y": 72,
+				"x": 535,
+				"y": -136,
 				"height": 80,
 				"width": 120,
 				"extensible": true,
@@ -106,6 +106,58 @@
 				"ui": "dynpath",
 				"config": {}
 			}
+		},
+		"12multiplexer2": {
+			"component": "com.sap.system.multiplexer.1-2",
+			"metadata": {
+				"label": "1:2 Multiplexer",
+				"x": 332,
+				"y": -110,
+				"height": 80,
+				"width": 120,
+				"extensible": true,
+				"config": {}
+			}
+		},
+		"javascriptoperator1": {
+			"component": "com.sap.system.jsengine",
+			"metadata": {
+				"label": "JavaScript Operator",
+				"x": 402,
+				"y": 244,
+				"height": 80,
+				"width": 120,
+				"extensible": true,
+				"config": {
+					"script": "$.setPortCallback(\"input\",onInput);\n\nfunction onInput(ctx,s) {\n    //$.output(s);\n\n    try {\n        var r = JSON.parse(s);\n    } catch(e) {\n        // fail silently on invalid JSON string\n        return;\n    }\n    if(!r.Success)\n        return;\n    if(r.Data === null)\n        return;\n    \n    var out = \"\";\n    for(var i = 0; i < r.Data.length; ++i) {\n        \n     \n        var row = r.Data[i];\n        for(var col in row){\n         if(row[col] === 'null')\n           row[col] = 0\n            \n        }    \n            out += row['value.speed'] + \", \" +row['value.battery'] +\", \"+row['value.rank'] +\", \"+row['value.user'] +\", \"+row['_MessageGateway_TimeISO8601'] +\", \"+row['value.id'] ;\n        out += \"\\n\";\n    }\n    $.output(out);\n    \n}"
+				}
+			}
+		},
+		"tomessageconverter2": {
+			"component": "com.sap.util.toMessageConverter",
+			"metadata": {
+				"label": "ToMessage Converter",
+				"x": 689,
+				"y": 306,
+				"height": 80,
+				"width": 120,
+				"config": {}
+			}
+		},
+		"hdfsproducer2": {
+			"component": "com.sap.storage.hdfs.producer",
+			"metadata": {
+				"label": "HDFS Producer",
+				"x": 889,
+				"y": 307,
+				"height": 80,
+				"width": 120,
+				"config": {
+					"hadoopNamenode": "spark-hdfs-adapter:8020",
+					"path": "/car_telemetry_solution/CarTelemetryStructuredDataExtract.csv",
+					"append": false
+				}
+			}
 		}
 	},
 	"groups": [],
@@ -151,20 +203,7 @@
 		},
 		{
 			"metadata": {
-				"points": "308,112 348,112"
-			},
-			"src": {
-				"port": "outresult",
-				"process": "sapvoraclient1"
-			},
-			"tgt": {
-				"port": "input",
-				"process": "javascriptoperator2"
-			}
-		},
-		{
-			"metadata": {
-				"points": "476,112 516,112"
+				"points": "659,-96 709,-96 709,8 466,8 466,112 516,112"
 			},
 			"src": {
 				"port": "output",
@@ -199,6 +238,71 @@
 			"tgt": {
 				"port": "in1",
 				"process": "terminal1"
+			}
+		},
+		{
+			"metadata": {
+				"points": "308,112 318,112 318,-70 328,-70"
+			},
+			"src": {
+				"port": "outresult",
+				"process": "sapvoraclient1"
+			},
+			"tgt": {
+				"port": "in1",
+				"process": "12multiplexer2"
+			}
+		},
+		{
+			"metadata": {
+				"points": "456,-79 493.5,-79 493.5,-96 531,-96"
+			},
+			"src": {
+				"port": "out1",
+				"process": "12multiplexer2"
+			},
+			"tgt": {
+				"port": "input",
+				"process": "javascriptoperator2"
+			}
+		},
+		{
+			"metadata": {
+				"points": "452,-56 348,-56 348,284 398,284"
+			},
+			"src": {
+				"port": "out2",
+				"process": "12multiplexer2"
+			},
+			"tgt": {
+				"port": "input",
+				"process": "javascriptoperator1"
+			}
+		},
+		{
+			"metadata": {
+				"points": "526,284 605.5,284 605.5,337 685,337"
+			},
+			"src": {
+				"port": "output",
+				"process": "javascriptoperator1"
+			},
+			"tgt": {
+				"port": "inbody",
+				"process": "tomessageconverter2"
+			}
+		},
+		{
+			"metadata": {
+				"points": "813,346 849,346 849,347 885,347"
+			},
+			"src": {
+				"port": "out",
+				"process": "tomessageconverter2"
+			},
+			"tgt": {
+				"port": "inFile",
+				"process": "hdfsproducer2"
 			}
 		}
 	],
