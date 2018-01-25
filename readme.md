@@ -30,8 +30,8 @@ Prep:
 - Modeler:
 
 
-		Create Dataset C_HDFS_MAT_ENRICH (For Join all above)
-  		Create / Run Task C_MAT_ENRICH
+		Create Dataset C_HDFS_MAT_JOIN (For Join all above)
+  		Create / Run Task C_HDFS_MAT_ENRICH
 	
 - Vora Tools:  
 	
