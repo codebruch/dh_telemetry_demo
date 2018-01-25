@@ -28,7 +28,7 @@
 					"mode": "once",
 					"duration": "2s",
 					"counter": 0,
-					"content": "select \"_MessageGateway_TimeISO8601\" ,\"value\".\"speed\",  \"value\".\"battery\", \"value\".\"rank\", \"value\".\"user\", \"value\".\"id\"  from \"VORA\".\"CAR_TELEMETRY_COLLECTION\" where \"deviceType\"='AnkiCar'and \"param\"='status' and \"_MessageGateway_TimeISO8601\" IS NOT MISSING limit 3000"
+					"content": "select \"_MessageGateway_TimeMilliseconds\" ,\"value\".\"speed\",  \"value\".\"battery\", \"value\".\"rank\", \"value\".\"user\", \"value\".\"id\"  from \"VORA\".\"CAR_TELEMETRY_COLLECTION\" where \"deviceType\"='AnkiCar'and \"param\"='status' and \"_MessageGateway_TimeMilliseconds\" IS NOT MISSING limit 10"
 				}
 			}
 		},
@@ -42,7 +42,7 @@
 				"width": 120,
 				"extensible": true,
 				"config": {
-					"script": "$.setPortCallback(\"input\",onInput);\n\nfunction onInput(ctx,s) {\n    //$.output(s);\n\n    try {\n        var r = JSON.parse(s);\n    } catch(e) {\n        // fail silently on invalid JSON string\n        return;\n    }\n    if(!r.Success)\n        return;\n    if(r.Data === null)\n        return;\n    \n    var out = \"\";\n    for(var i = 0; i < r.Data.length; ++i) {\n        \n        if(i === 0)\n            out += \"speed, battery, rank, user, timest, id\\n\" ;\n            \n        var row = r.Data[i];\n        for(var col in row){\n         if(row[col] === 'null')\n           row[col] = 0\n            \n        }    \n            out += row['value.speed'] + \", \" +row['value.battery'] +\", \"+row['value.rank'] +\", \"+row['value.user'] +\", \"+row['_MessageGateway_TimeISO8601'] +\", \"+row['value.id'] ;\n        out += \"\\n\";\n    }\n    $.output(out);\n    \n}"
+					"script": "$.setPortCallback(\"input\",onInput);\n\nfunction onInput(ctx,s) {\n    //$.output(s);\n\n    try {\n        var r = JSON.parse(s);\n    } catch(e) {\n        // fail silently on invalid JSON string\n        return;\n    }\n    if(!r.Success)\n        return;\n    if(r.Data === null)\n        return;\n    \n    var out = \"\";\n    for(var i = 0; i < r.Data.length; ++i) {\n        \n        if(i === 0)\n            out += \"speed, battery, rank, user, timest, id\\n\" ;\n            \n        var row = r.Data[i];\n        for(var col in row){\n         if(row[col] === 'null')\n           row[col] = 0\n            \n        }    \n            out += row['value.speed'] + \", \" +row['value.battery'] +\", \"+row['value.rank'] +\", \"+row['value.user'] +\", \"+row['_MessageGateway_TimeMilliseconds'] +\", \"+row['value.id'] ;\n        out += \"\\n\";\n    }\n    $.output(out);\n    \n}"
 				}
 			}
 		},
@@ -129,7 +129,7 @@
 				"width": 120,
 				"extensible": true,
 				"config": {
-					"script": "$.setPortCallback(\"input\",onInput);\n\nfunction onInput(ctx,s) {\n    //$.output(s);\n\n    try {\n        var r = JSON.parse(s);\n    } catch(e) {\n        // fail silently on invalid JSON string\n        return;\n    }\n    if(!r.Success)\n        return;\n    if(r.Data === null)\n        return;\n    \n    var out = \"\";\n    for(var i = 0; i < r.Data.length; ++i) {\n        \n     \n        var row = r.Data[i];\n        for(var col in row){\n         if(row[col] === 'null')\n           row[col] = 0\n            \n        }    \n            out += row['value.speed'] + \", \" +row['value.battery'] +\", \"+row['value.rank'] +\", \"+row['value.user'] +\", \"+row['_MessageGateway_TimeISO8601'] +\", \"+row['value.id'] ;\n        out += \"\\n\";\n    }\n    $.output(out);\n    \n}"
+					"script": "$.setPortCallback(\"input\",onInput);\n\nfunction onInput(ctx,s) {\n    //$.output(s);\n\n    try {\n        var r = JSON.parse(s);\n    } catch(e) {\n        // fail silently on invalid JSON string\n        return;\n    }\n    if(!r.Success)\n        return;\n    if(r.Data === null)\n        return;\n    \n    var out = \"\";\n    for(var i = 0; i < r.Data.length; ++i) {\n        \n     //.replace(\"\\\"\", \"\")\n        var row = r.Data[i];\n        for(var col in row){\n         if(row[col] === 'null')\n           row[col] = 0\n            \n        }    \n            out += row['value.speed'] + '; ' +row['value.battery'] +'; '+row['value.rank'] +'; '+row['value.user'] +'; '+row['_MessageGateway_TimeMilliseconds'] +'; '+row['value.id'] ;\n        out += \"\\n\";\n    }\n    $.output(out);\n    \n}"
 				}
 			}
 		},
