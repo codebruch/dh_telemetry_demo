@@ -31,5 +31,3 @@ Doing:
 - Hana Studio: Create VirtTab C_HANA_MAT_ENRICH  
 
 - XS Classic:  
-
-
