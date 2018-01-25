@@ -31,7 +31,7 @@ Prep:
 
 
 		Create Dataset C_HDFS_MAT_JOIN (For Join all above)
-  		Create / Run Task C_HDFS_MAT_ENRICH
+  		Create / Run Task C_HDFS_MAT_JOINT
 	
 - Vora Tools:  
 	
