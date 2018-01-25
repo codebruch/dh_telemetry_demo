@@ -21,11 +21,11 @@ Prep:
 		Create Dataset B_HANA_MAT_BASIC
 		Create Dataset B_HANA_MAT_BEW
 		Create Dataset B_HANA_MAT_TEXT
-		Create Dataset B_HANA_MAT_BASIC
+		
 		Create Dataset B_HDFS_MAT_BASIC
 		Create Dataset B_HDFS_MAT_BEW
 		Create Dataset B_HDFS_MAT_TEXT
-		Create Dataset B_HDFS_MAT_BASIC
+
 		Create Dataset C_HDFS_MAC_MAT (aus CSV TODO) 
 - Modeler:
 
