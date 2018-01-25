@@ -29,7 +29,9 @@ Prep:
 		Create Dataset C_HDFS_MAC_MAT (aus CSV TODO) 
 - Modeler:
 
-
+		Create Data Copy Tasks
+			B_COPY_MAT_BASIC does not work --> Task could not be activated: datasets and/or destinationRefs pointing to different systems (23613)
+			
 		Create Dataset C_HDFS_MAT_JOIN (For Join all above)
   		Create / Run Task C_HDFS_MAT_JOINT
 	
