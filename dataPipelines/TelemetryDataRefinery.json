@@ -7,7 +7,7 @@
 			"metadata": {
 				"label": "SAP Vora Client",
 				"x": 184,
-				"y": 72,
+				"y": 132,
 				"height": 80,
 				"width": 120,
 				"config": {
@@ -20,7 +20,7 @@
 			"metadata": {
 				"label": "Constant Generator",
 				"x": 16,
-				"y": 72,
+				"y": 132,
 				"height": 80,
 				"width": 120,
 				"extensible": true,
@@ -28,7 +28,7 @@
 					"mode": "once",
 					"duration": "2s",
 					"counter": 0,
-					"content": "select \"_MessageGateway_TimeMilliseconds\" ,\"value\".\"speed\",  \"value\".\"battery\", \"value\".\"rank\", \"value\".\"user\", \"value\".\"id\"  from \"VORA\".\"CAR_TELEMETRY_COLLECTION\" where \"deviceType\"='AnkiCar'and \"param\"='status' and \"_MessageGateway_TimeMilliseconds\" IS NOT MISSING limit 10"
+					"content": "select \"_MessageGateway_TimeMilliseconds\" ,\"value\".\"speed\",  \"value\".\"battery\", \"value\".\"rank\", \"value\".\"user\", \"value\".\"id\"  from \"VORA\".\"CAR_TELEMETRY_COLLECTION\" where \"deviceType\"='AnkiCar'and \"param\"='status' and \"_MessageGateway_TimeMilliseconds\" IS NOT MISSING limit 3000"
 				}
 			}
 		},
@@ -36,13 +36,13 @@
 			"component": "com.sap.system.jsengine",
 			"metadata": {
 				"label": "JavaScript Operator",
-				"x": 535,
-				"y": -136,
+				"x": 535.9999990463257,
+				"y": 72,
 				"height": 80,
 				"width": 120,
 				"extensible": true,
 				"config": {
-					"script": "$.setPortCallback(\"input\",onInput);\n\nfunction onInput(ctx,s) {\n    //$.output(s);\n\n    try {\n        var r = JSON.parse(s);\n    } catch(e) {\n        // fail silently on invalid JSON string\n        return;\n    }\n    if(!r.Success)\n        return;\n    if(r.Data === null)\n        return;\n    \n    var out = \"\";\n    for(var i = 0; i < r.Data.length; ++i) {\n        \n        if(i === 0)\n            out += \"speed, battery, rank, user, timest, id\\n\" ;\n            \n        var row = r.Data[i];\n        for(var col in row){\n         if(row[col] === 'null')\n           row[col] = 0\n            \n        }    \n            out += row['value.speed'] + \", \" +row['value.battery'] +\", \"+row['value.rank'] +\", \"+row['value.user'] +\", \"+row['_MessageGateway_TimeMilliseconds'] +\", \"+row['value.id'] ;\n        out += \"\\n\";\n    }\n    $.output(out);\n    \n}"
+					"script": "$.setPortCallback(\"input\",onInput);\n\nfunction onInput(ctx,s) {\n    //$.output(s);\n\n    try {\n        var r = JSON.parse(s);\n    } catch(e) {\n        // fail silently on invalid JSON string\n        return;\n    }\n    if(!r.Success)\n        return;\n    if(r.Data === null)\n        return;\n    \n    var out = \"\";\n    for(var i = 0; i < r.Data.length; ++i) {\n        \n        if(i === 0)\n            out += \"speed, battery, rank, user, timest, id\\n\" ;\n            \n        var row = r.Data[i];\n        for(var col in row){\n         if(row[col] === 'null')\n           row[col] = 0\n            \n        }   \n\n    var raceTestRun = new String(row['value.user']);\n    raceTestRun = raceTestRun.replace(/\"/g,\"\");\n    \n    if(raceTestRun === \"AI Driver\") {\n        raceTestRun = \"Test Stand Break Overheat\";\n        \n    }   else\n    if(raceTestRun === \"controller\") {\n        raceTestRun = \"Test Stand Battery Voltage lost\";\n        \n    } else\n     if(raceTestRun === \"chris\") {\n        raceTestRun = \"Test Stand Wear over time gearbox\";\n        \n    } else\n    if(raceTestRun === \"xxxx\") {\n        raceTestRun = \"Test Stand High Acceleration Torque fail\";\n        \n    } \n    \n    \n\n  \n        \n        \n            out += row['value.speed'] + \", \" +row['value.battery'] +\", \"+row['value.rank'] +\", \"+raceTestRun +\", \"+row['_MessageGateway_TimeMilliseconds'] +\", \"+row['value.id'] ;\n        out += \"\\n\";\n    }\n    $.output(out);\n    \n}"
 				}
 			}
 		},
@@ -50,8 +50,8 @@
 			"component": "com.sap.storage.hdfs.producer",
 			"metadata": {
 				"label": "HDFS Producer",
-				"x": 887.9999980926514,
-				"y": 72,
+				"x": 1071.999997138977,
+				"y": 132,
 				"height": 80,
 				"width": 120,
 				"config": {
@@ -65,7 +65,7 @@
 			"component": "com.sap.util.toMessageConverter",
 			"metadata": {
 				"label": "ToMessage Converter",
-				"x": 703.9999990463257,
+				"x": 903.999997138977,
 				"y": 132,
 				"height": 80,
 				"width": 120,
@@ -76,8 +76,8 @@
 			"component": "com.sap.util.graphTerminator",
 			"metadata": {
 				"label": "Graph Terminator",
-				"x": 1055.9999980926514,
-				"y": 72,
+				"x": 1239.999997138977,
+				"y": 132,
 				"height": 80,
 				"width": 120,
 				"config": {}
@@ -87,7 +87,7 @@
 			"component": "com.sap.system.multiplexer.1-2",
 			"metadata": {
 				"label": "1:2 Multiplexer",
-				"x": 520,
+				"x": 719.9999980926514,
 				"y": 72,
 				"height": 80,
 				"width": 120,
@@ -99,7 +99,7 @@
 			"component": "com.sap.util.terminal",
 			"metadata": {
 				"label": "Terminal",
-				"x": 703.9999990463257,
+				"x": 903.999997138977,
 				"y": 12,
 				"height": 80,
 				"width": 120,
@@ -111,8 +111,8 @@
 			"component": "com.sap.system.multiplexer.1-2",
 			"metadata": {
 				"label": "1:2 Multiplexer",
-				"x": 332,
-				"y": -110,
+				"x": 352,
+				"y": 132,
 				"height": 80,
 				"width": 120,
 				"extensible": true,
@@ -123,13 +123,13 @@
 			"component": "com.sap.system.jsengine",
 			"metadata": {
 				"label": "JavaScript Operator",
-				"x": 402,
-				"y": 244,
+				"x": 535.9999990463257,
+				"y": 192,
 				"height": 80,
 				"width": 120,
 				"extensible": true,
 				"config": {
-					"script": "$.setPortCallback(\"input\",onInput);\n\nfunction onInput(ctx,s) {\n    //$.output(s);\n\n    try {\n        var r = JSON.parse(s);\n    } catch(e) {\n        // fail silently on invalid JSON string\n        return;\n    }\n    if(!r.Success)\n        return;\n    if(r.Data === null)\n        return;\n    \n    var out = \"\";\n    for(var i = 0; i < r.Data.length; ++i) {\n        \n     //.replace(\"\\\"\", \"\")\n        var row = r.Data[i];\n        for(var col in row){\n         if(row[col] === 'null')\n           row[col] = 0\n            \n        }    \n            out += row['value.speed'] + '; ' +row['value.battery'] +'; '+row['value.rank'] +'; '+row['value.user'] +'; '+row['_MessageGateway_TimeMilliseconds'] +'; '+row['value.id'] ;\n        out += \"\\n\";\n    }\n    $.output(out);\n    \n}"
+					"script": "$.setPortCallback(\"input\",onInput);\n\nfunction onInput(ctx,s) {\n    //$.output(s);\n\n    try {\n        var r = JSON.parse(s);\n    } catch(e) {\n        // fail silently on invalid JSON string\n        return;\n    }\n    if(!r.Success)\n        return;\n    if(r.Data === null)\n        return;\n    \n    var out = \"\";\n    for(var i = 0; i < r.Data.length; ++i) {\n        \n     //.replace(\"\\\"\", \"\")\n        var row = r.Data[i];\n        for(var col in row){\n         if(row[col] === 'null')\n           row[col] = 0\n            \n        }    \n\n var raceTestRun = new String(row['value.user']);\n    raceTestRun = raceTestRun.replace(/\"/g,\"\");\n    \n    if(raceTestRun === \"AI Driver\") {\n        raceTestRun = \"Test Stand Break Overheat\";\n        \n    }   else\n    if(raceTestRun === \"controller\") {\n        raceTestRun = \"Test Stand Battery Voltage lost\";\n        \n    } else\n     if(raceTestRun === \"chris\") {\n        raceTestRun = \"Test Stand Wear over time gearbox\";\n        \n    } else\n    if(raceTestRun === \"xxxx\") {\n        raceTestRun = \"Test Stand High Acceleration Torque fail\";\n        \n    } \n    \n  \n        \n        \n            out += row['value.speed'] + \", \" +row['value.battery'] +\", \"+row['value.rank'] +\", \"+raceTestRun +\", \"+row['_MessageGateway_TimeMilliseconds'] +\", \"+row['value.id'] ;\n\n\n        out += \"\\n\";\n    }\n    $.output(out);\n    \n}"
 				}
 			}
 		},
@@ -137,8 +137,8 @@
 			"component": "com.sap.util.toMessageConverter",
 			"metadata": {
 				"label": "ToMessage Converter",
-				"x": 689,
-				"y": 306,
+				"x": 719.9999980926514,
+				"y": 192,
 				"height": 80,
 				"width": 120,
 				"config": {}
@@ -148,8 +148,8 @@
 			"component": "com.sap.storage.hdfs.producer",
 			"metadata": {
 				"label": "HDFS Producer",
-				"x": 889,
-				"y": 307,
+				"x": 903.999997138977,
+				"y": 252,
 				"height": 80,
 				"width": 120,
 				"config": {
@@ -164,7 +164,7 @@
 	"connections": [
 		{
 			"metadata": {
-				"points": "827.9999990463257,172 855.9999985694885,172 855.9999985694885,112 883.9999980926514,112"
+				"points": "1027.999997138977,172 1067.999997138977,172"
 			},
 			"src": {
 				"port": "out",
@@ -177,7 +177,7 @@
 		},
 		{
 			"metadata": {
-				"points": "1011.9999980926514,112 1051.9999980926514,112"
+				"points": "1195.999997138977,172 1235.999997138977,172"
 			},
 			"src": {
 				"port": "outFilename",
@@ -190,7 +190,7 @@
 		},
 		{
 			"metadata": {
-				"points": "140,112 180,112"
+				"points": "140,172 180,172"
 			},
 			"src": {
 				"port": "out",
@@ -203,7 +203,7 @@
 		},
 		{
 			"metadata": {
-				"points": "659,-96 709,-96 709,8 466,8 466,112 516,112"
+				"points": "659.9999990463257,112 715.9999980926514,112"
 			},
 			"src": {
 				"port": "output",
@@ -216,7 +216,7 @@
 		},
 		{
 			"metadata": {
-				"points": "644,121 671.9999995231628,121 671.9999995231628,163 699.9999990463257,163"
+				"points": "843.9999980926514,121 871.9999976158142,121 871.9999976158142,163 899.999997138977,163"
 			},
 			"src": {
 				"port": "out2",
@@ -229,7 +229,7 @@
 		},
 		{
 			"metadata": {
-				"points": "644,103 671.9999995231628,103 671.9999995231628,52 699.9999990463257,52"
+				"points": "843.9999980926514,103 871.9999976158142,103 871.9999976158142,52 899.999997138977,52"
 			},
 			"src": {
 				"port": "out1",
@@ -242,7 +242,7 @@
 		},
 		{
 			"metadata": {
-				"points": "308,112 318,112 318,-70 328,-70"
+				"points": "308,172 348,172"
 			},
 			"src": {
 				"port": "outresult",
@@ -255,7 +255,7 @@
 		},
 		{
 			"metadata": {
-				"points": "456,-79 493.5,-79 493.5,-96 531,-96"
+				"points": "476,163 503.99999952316284,163 503.99999952316284,112 531.9999990463257,112"
 			},
 			"src": {
 				"port": "out1",
@@ -268,7 +268,7 @@
 		},
 		{
 			"metadata": {
-				"points": "452,-56 348,-56 348,284 398,284"
+				"points": "476,181 503.99999952316284,181 503.99999952316284,232 531.9999990463257,232"
 			},
 			"src": {
 				"port": "out2",
@@ -281,7 +281,7 @@
 		},
 		{
 			"metadata": {
-				"points": "526,284 605.5,284 605.5,337 685,337"
+				"points": "659.9999990463257,232 687.9999985694885,232 687.9999985694885,223 715.9999980926514,223"
 			},
 			"src": {
 				"port": "output",
@@ -294,7 +294,7 @@
 		},
 		{
 			"metadata": {
-				"points": "813,346 849,346 849,347 885,347"
+				"points": "843.9999980926514,232 871.9999976158142,232 871.9999976158142,292 899.999997138977,292"
 			},
 			"src": {
 				"port": "out",
