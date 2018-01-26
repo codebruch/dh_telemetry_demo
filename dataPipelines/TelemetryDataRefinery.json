@@ -42,7 +42,7 @@
 				"width": 120,
 				"extensible": true,
 				"config": {
-					"script": "$.setPortCallback(\"input\",onInput);\n\nfunction onInput(ctx,s) {\n    //$.output(s);\n\n    try {\n        var r = JSON.parse(s);\n    } catch(e) {\n        // fail silently on invalid JSON string\n        return;\n    }\n    if(!r.Success)\n        return;\n    if(r.Data === null)\n        return;\n    \n    var out = \"\";\n    for(var i = 0; i < r.Data.length; ++i) {\n        \n        if(i === 0)\n            out += \"speed, battery, rank, user, timest, id\\n\" ;\n            \n        var row = r.Data[i];\n        for(var col in row){\n         if(row[col] === 'null')\n           row[col] = 0\n            \n        }   \n\n    var raceTestRun = new String(row['value.user']);\n    raceTestRun = raceTestRun.replace(/\"/g,\"\");\n    \n    if(raceTestRun === \"AI Driver\") {\n        raceTestRun = \"Test Stand Break Overheat\";\n        \n    }   else\n    if(raceTestRun === \"controller\") {\n        raceTestRun = \"Test Stand Battery Voltage lost\";\n        \n    } else\n     if(raceTestRun === \"chris\") {\n        raceTestRun = \"Test Stand Wear over time gearbox\";\n        \n    } else\n    if(raceTestRun === \"xxxx\") {\n        raceTestRun = \"Test Stand High Acceleration Torque fail\";\n        \n    } \n    \n    \n\n  \n        \n        \n            out += row['value.speed'] + \", \" +row['value.battery'] +\", \"+row['value.rank'] +\", \"+raceTestRun +\", \"+row['_MessageGateway_TimeMilliseconds'] +\", \"+row['value.id'] ;\n        out += \"\\n\";\n    }\n    $.output(out);\n    \n}"
+					"script": "$.setPortCallback(\"input\",onInput);\n\nfunction onInput(ctx,s) {\n    //$.output(s);\n\n    try {\n        var r = JSON.parse(s);\n    } catch(e) {\n        // fail silently on invalid JSON string\n        return;\n    }\n    if(!r.Success)\n        return;\n    if(r.Data === null)\n        return;\n    \n    var out = \"\";\n    for(var i = 0; i < r.Data.length; ++i) {\n        \n        if(i === 0)\n            out += \"speed, battery, rank, user, timest, id\\n\" ;\n            \n        var row = r.Data[i];\n        for(var col in row){\n         if(row[col] === 'null')\n           row[col] = 0\n            \n        }   \n\n    var raceTestRun = new String(row['value.user']);\n    raceTestRun = raceTestRun.replace(/\"/g,\"\");\n    \n    if(raceTestRun === \"AI Driver\") {\n        raceTestRun = \"Race 1 Break Overheat\";\n        \n    }   else\n    if(raceTestRun === \"controller\") {\n        raceTestRun = \"Race 2 break exhaust\";\n        \n    } else\n     if(raceTestRun === \"chris\") {\n        raceTestRun = \"Race 3\";\n        \n    } else\n    if(raceTestRun === \"xxxx\") {\n        raceTestRun = \"Race  4\";\n        \n    } \n    \n    \n\n  \n        \n        \n            out += row['value.speed'] + \", \" +row['value.battery'] +\", \"+row['value.rank'] +\", \"+raceTestRun +\", \"+row['_MessageGateway_TimeMilliseconds'] +\", \"+row['value.id'] ;\n        out += \"\\n\";\n    }\n    $.output(out);\n    \n}"
 				}
 			}
 		},
@@ -154,7 +154,7 @@
 				"width": 120,
 				"config": {
 					"hadoopNamenode": "spark-hdfs-adapter:8020",
-					"path": "/car_telemetry_solution/CarTelemetryStructuredDataExtract.csv",
+					"path": "/car_telemetry_solution/CarTelemetryStructuredTrainingData.csv",
 					"append": false
 				}
 			}
