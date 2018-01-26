@@ -1,1 +1,5 @@
 https://blogs.sap.com/2016/12/23/r-integration-with-sap-hana/
+
+Collecting threshhold violations of live data for a concrete car to give it a score.
+Thresholds come from material specification in the system.
+Use past test stand data to asess the type of possible damage.
